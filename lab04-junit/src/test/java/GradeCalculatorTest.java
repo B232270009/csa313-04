@@ -3,8 +3,47 @@ package mn.edu.must.sqat;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+
+
+
 
 public class GradeCalculatorTest {
+
+
+    @ParameterizedTest
+    @DisplayName("letterGrade: Хязгаарын болон ердийн утгуудыг шалгах")
+    @CsvSource({
+        "100.0, A",
+        "95.0, A",
+        "90.0, A",
+        "89.99, B",
+        "80.0, B",
+        "79.99, C",
+        "70.0, C",
+        "69.99, D",
+        "60.0, D",
+        "59.99, F",
+        "0.0, F"
+    })
+    void letterGradeBoundaries(double score, String expected) {
+        GradeCalculator calc = new GradeCalculator();
+        assertEquals(expected, calc.letterGrade(score));
+    }
+
+    @ParameterizedTest
+    @DisplayName("totalScore: Төрөл бүрийн зөв оролтуудад нийлбэрийг шалгах")
+    @CsvSource({
+        "10.0, 40.0, 10.0, 10.0, 30.0, 100.0",
+        "5.0, 20.0, 5.0, 5.0, 15.0, 50.0",
+        "0.0, 0.0, 0.0, 0.0, 0.0, 0.0",
+        "10.0, 39.5, 9.5, 9.0, 29.0, 97.0"
+    })
+    void totalScoreCalculations(double att, double lab, double quiz1, double quiz2, double exam, double expected) {
+        GradeCalculator calc = new GradeCalculator();
+        assertEquals(expected, calc.totalScore(att, lab, quiz1, quiz2, exam));
+    }
 
     @Test
     @DisplayName("90 оноо яг A дүн байх ёстой (хязгаарын тохиолдол)")
